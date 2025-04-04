@@ -24,7 +24,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stdlib.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,18 +46,28 @@ static dozdgirState dozdgir_status={0};
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+//extern char uart1_rx_buffer[RX_BUFFER_SIZE];
+extern char uart1_rx_temp;
+//extern char receive_message[RX_BUFFER_SIZE];
+//extern char receive_message_number[30];
+char number[] = "+989128442948";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+void HAL_UART_RxCpltCallback (UART_HandleTypeDef *huart)
+{
+		if (huart == &huart1)
+		{
+				get_answer();
+		}
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-const char matn[]="AT\n";
+const char matn[]="AT\n\r";
 
 /* USER CODE END 0 */
 
@@ -91,8 +102,20 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   MX_TIM2_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_Delay(500);
+
+	if (GSM_init())
+	{
+		green_blink(2000);
+		printf("GSM initilized successfully.");
+	}
+	else
+	{
+		yellow_blink(2000);
+		printf("GSM not initialized.");
+	}
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -126,6 +149,9 @@ int main(void)
 			HAL_TIM_Base_Start_IT(&htim2);
 			enableAjir(GPIO_PIN_SET);
 			dozdgir_status.vaziat=ajir_faal;
+//			uint16_t test[]={دزدگیر فعال شد ...};
+			GSM_send_message("Dozdgir Faal Shod\n\rS-Help...", number);
+//			GSM_send_message(test, number);
 			break;
 		case faal_kardan_ersal_sms:
 
@@ -142,12 +168,27 @@ int main(void)
 			break;
 
 		case ersal_sms:
-
+			HAL_UART_Transmit_IT(&huart1, matn, sizeof(matn));
+			HAL_Delay(100);
 			break;
 
 		default:
 			break;
 	}
+
+//  if (strstr(uart1_rx_buffer, "+CMTI:") != NULL)
+//  {
+//	  GSM_read_message();
+//	  if ((strstr(receive_message, "Test SMS") != NULL) && (strstr(receive_message_number, number) != NULL))
+//		{
+//				GSM_send_message("sms received", number);
+//		}
+//
+//
+//	  memset(receive_message, 0, RX_BUFFER_SIZE);
+//	  memset(receive_message_number, 0, RECEIVE_NUMBER_SIZE);
+//
+//	}
   }
   /* USER CODE END 3 */
 }
@@ -233,6 +274,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 	if (GPIO_Pin == pwr_int_Pin)
 	{ //Power Loss Happened
+		toggleLed();
 
 	}
 }
