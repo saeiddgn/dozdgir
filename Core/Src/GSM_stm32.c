@@ -45,21 +45,20 @@ uint8_t GSM_init (void)
 	
 	ret |= (ok << 2);
 	
+    /*Check for Unicode support text */
 
-	/*Check for Unicode support text */
-
-	ok = send_AT_command("AT+CSCS=\"HEX\"\r\n", "OK\r\n");
+//	ok = send_AT_command("AT+CSCS=\"HEX\"\r\n", "OK\r\n");
+	ok = send_AT_command("AT+CSCS=\"GSM\"\r\n", "OK\r\n");
 
 	ret |= (ok << 3);
 
 
 	/*Settings for Sms Validity duration and Unicode */
 
-	ok = send_AT_command("AT+CSMP=17,169,0,8", "OK\r\n");
+	ok = send_AT_command("AT+CSMP=17,169,0,8\r\n", "OK\r\n");
 
 	ret |= (ok << 4);
 
-	
 	/*save sms in sim card*/
 	
 	ok = send_AT_command("AT+CNMI=2,1,0,0,0\r\n", "OK\r\n");

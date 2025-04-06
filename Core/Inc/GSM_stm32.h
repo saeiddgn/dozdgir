@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 #define HUART &huart1
-#define RX_BUFFER_SIZE 100
+#define RX_BUFFER_SIZE 200
 #define RECEIVE_NUMBER_SIZE 30
 #define TRUE 1
 #define FALSE 0

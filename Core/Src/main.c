@@ -149,9 +149,8 @@ int main(void)
 			HAL_TIM_Base_Start_IT(&htim2);
 			enableAjir(GPIO_PIN_SET);
 			dozdgir_status.vaziat=ajir_faal;
-//			uint16_t test[]={دزدگیر فعال شد ...};
-			GSM_send_message("Dozdgir Faal Shod\n\rS-Help...", number);
-//			GSM_send_message(test, number);
+//			GSM_send_message("Dozdgir Faal Shod\n\rS-Help...", number);
+			GSM_send_message("Dozdgir Fa'al shod", number);
 			break;
 		case faal_kardan_ersal_sms:
 
@@ -159,6 +158,7 @@ int main(void)
 
 		case khamosh_kardan_ajir:
 			enableAjir(GPIO_PIN_RESET);
+			HAL_TIM_Base_Stop_IT(&htim2);
 			dozdgir_status.vaziat=dozdgir_faal;
 			break;
 
@@ -249,7 +249,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	if (GPIO_Pin == pir_int_Pin)
 	{ /* Enable Ajir */
 
-		if(dozdgir_status.vaziat==dozdgir_faal)
+		if(dozdgir_status.vaziat==dozdgir_faal ||\
+				dozdgir_status.vaziat==ajir_faal)
 		{
 			dozdgir_status.vaziat=faal_kardan_ajir;
 		}
@@ -274,7 +275,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 	if (GPIO_Pin == pwr_int_Pin)
 	{ //Power Loss Happened
-		toggleLed();
 
 	}
 }
@@ -300,7 +300,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* USER CODE BEGIN Callback 1 */
   if(htim->Instance == TIM2)
   {
-	  dozdgir_status.vaziat=khamosh_kardan_ajir;
+	  if(dozdgir_status.vaziat==ajir_faal)
+	  {
+		  dozdgir_status.vaziat=khamosh_kardan_ajir;
+	  }
   }
   /* USER CODE END Callback 1 */
 }
