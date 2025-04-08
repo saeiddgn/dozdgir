@@ -47,8 +47,7 @@ uint8_t GSM_init (void)
 	
     /*Check for Unicode support text */
 
-//	ok = send_AT_command("AT+CSCS=\"HEX\"\r\n", "OK\r\n");
-	ok = send_AT_command("AT+CSCS=\"GSM\"\r\n", "OK\r\n");
+	ok = send_AT_command("AT+CSCS=\"HEX\"\r\n", "OK\r\n");
 
 	ret |= (ok << 3);
 

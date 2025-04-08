@@ -150,7 +150,8 @@ int main(void)
 			enableAjir(GPIO_PIN_SET);
 			dozdgir_status.vaziat=ajir_faal;
 //			GSM_send_message("Dozdgir Faal Shod\n\rS-Help...", number);
-			GSM_send_message("Dozdgir Fa'al shod", number);
+			GSM_send_message("062F06500632062F06AF06CC063100200631064806"\
+					"340020062F064E06A90650062A0647D83DDD0A", number);
 			break;
 		case faal_kardan_ersal_sms:
 
