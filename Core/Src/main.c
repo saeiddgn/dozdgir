@@ -108,13 +108,11 @@ int main(void)
 
 	if (GSM_init())
 	{
-		green_blink(2000);
-		printf("GSM initilized successfully.");
+//		green_blink(1000);
 	}
 	else
 	{
-		yellow_blink(2000);
-		printf("GSM not initialized.");
+//		yellow_blink(1000);
 	}
   /* USER CODE END 2 */
 
@@ -138,9 +136,9 @@ int main(void)
 			break;
 
 		case faal_kardan_dozdgir:
-			enableAjir(true);
+			enableAjir(GPIO_PIN_SET);
 			HAL_Delay(100);
-			enableAjir(false);
+			enableAjir(GPIO_PIN_RESET);
 			dozdgir_status.vaziat=dozdgir_faal;
 			break;
 
@@ -150,8 +148,7 @@ int main(void)
 			enableAjir(GPIO_PIN_SET);
 			dozdgir_status.vaziat=ajir_faal;
 //			GSM_send_message("Dozdgir Faal Shod\n\rS-Help...", number);
-			GSM_send_message("062F06500632062F06AF06CC063100200631064806"\
-					"340020062F064E06A90650062A0647D83DDD0A", number);
+			GSM_send_message("062F06500632062F06AF06CC063100200631064806340020062F064E06A90650062A0647D83DDD0A", number);
 			break;
 		case faal_kardan_ersal_sms:
 
@@ -164,6 +161,8 @@ int main(void)
 			break;
 
 		case khamosh_kardan_dozdgir:
+			enableAjir(GPIO_PIN_SET);
+			HAL_Delay(100);
 			enableAjir(GPIO_PIN_RESET);
 			dozdgir_status.vaziat=amade_be_kar;
 			break;

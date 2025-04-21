@@ -48,7 +48,8 @@ enum vaziat
 	faal_kardan_ajir,
 	khamosh_kardan_ajir,
 	faal_kardan_ersal_sms,
-	ersal_sms
+	ersal_sms,
+	ghate_bargh
 };
 
 typedef struct
